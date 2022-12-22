@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.leumas.filmescoroutines.R
 import br.com.leumas.filmescoroutines.data.repository.MainRepositoryImp
+import br.com.leumas.filmescoroutines.ui.adapter.FilmesFragmentAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : Fragment() {
@@ -36,9 +38,13 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+
         viewModel.filmesLiveData.observe(viewLifecycleOwner) { filmes ->
-            textViewFilmes.text = filmes[0].titulo
+            recyclerViewFilmes.adapter = FilmesFragmentAdapter(this, filmes)
+            recyclerViewFilmes.layoutManager = layoutManager
         }
+
         viewModel.getFilmesCoroutines()
     }
 }
